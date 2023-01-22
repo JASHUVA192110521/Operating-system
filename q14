@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_FILES 10
+#define MAX_NAME_LENGTH 20
+
+struct file {
+    char name[MAX_NAME_LENGTH];
+    int size;
+};
+
+struct directory {
+    struct file files[MAX_FILES];
+    int file_count;
+};
+
+void init_directory(struct directory *dir) {
+    dir->file_count = 0;
+}
+
+void add_file(struct directory *dir, char *name, int size) {
+    strcpy(dir->files[dir->file_count].name, name);
+    dir->files[dir->file_count].size = size;
+    dir->file_count++;
+}
+
+void delete_file(struct directory *dir, char *name) {
+    int i;
+    for (i = 0; i < dir->file_count; i++) {
+        if (strcmp(dir->files[i].name, name) == 0) {
+            int j;
+            for (j = i; j < dir->file_count - 1; j++) {
+                dir->files[j] = dir->files[j + 1];
+            }
+            dir->file_count--;
+            break;
+        }
+    }
+}
+
+void list_directory(struct directory *dir) {
+    int i;
